@@ -23,28 +23,25 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { authClient } from "@/lib/auth/client";
-import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
 
-const registerSchema
- = z.object({
-  email: z.email("Please enter a valid email address"),
-  password: z.string().min(1, "password is required"),
-  confirmPassword: z.string()
-})
-.refine((data)=> data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-})
+const registerSchema = z
+  .object({
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(1, "password is required"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
-  const Router = useRouter();
+  const router = useRouter();
   const form = useForm<RegisterFormValues>({
-    resolver: zodResolver(registerSchema
-
-    ),
+    resolver: zodResolver(registerSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -53,7 +50,22 @@ export function RegisterForm() {
   });
 
   const onSubmit = async (values: RegisterFormValues) => {
-    console.log(values);
+    await authClient.signUp.email(
+      {
+        name: values.email,
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message || "Something went wrong");
+        },
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -123,7 +135,7 @@ export function RegisterForm() {
                         </FormItem>
                       )}
                     />
-                     <FormField
+                    <FormField
                       control={form.control}
                       name="confirmPassword"
                       render={({ field }) => (

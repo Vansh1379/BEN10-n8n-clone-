@@ -23,8 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-// import { authClient } from "@/lib/auth/client";
-import { cn } from "@/lib/utils";
+import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
   email: z.email("Please enter a valid email address"),
@@ -34,7 +33,7 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
-  const Router = useRouter();
+  const router = useRouter();
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -44,7 +43,21 @@ export function LoginForm() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    console.log(values);
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      }
+    );
   };
 
   const isPending = form.formState.isSubmitting;
@@ -99,7 +112,7 @@ export function LoginForm() {
                     <FormField
                       control={form.control}
                       name="password"
-                      render={({ field }) => (   
+                      render={({ field }) => (
                         <FormItem>
                           <FormLabel>Passwords</FormLabel>
                           <FormControl>
