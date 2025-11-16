@@ -79,6 +79,12 @@ export function LoginForm() {
                       type="button"
                       disabled={isPending}
                     >
+                      <Image
+                        alt="Github"
+                        src="/logos/github.svg"
+                        width={20}
+                        height={20}
+                      />
                       Continue with Github
                     </Button>
                     <Button
@@ -87,10 +93,16 @@ export function LoginForm() {
                       type="button"
                       disabled={isPending}
                     >
+                      <Image
+                        alt="Goggle"
+                        src="/logos/google.svg"
+                        width={20}
+                        height={20}
+                      />
                       Continue with Goggle
                     </Button>
                   </div>
-                  <div className="grid gap-6 ">
+                  <div className="grid gap-6 pt-2 ">
                     <FormField
                       control={form.control}
                       name="email"
@@ -135,7 +147,7 @@ export function LoginForm() {
                       Login
                     </Button>
                   </div>
-                  <div className="text-center text-sm">
+                  <div className="text-center text-sm pt-2">
                     Don&apos;t have an account?{" "}
                     <Link
                       href="/register"

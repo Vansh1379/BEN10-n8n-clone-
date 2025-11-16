@@ -74,8 +74,8 @@ export function RegisterForm() {
     <div className="flex flex-col gap-6 ">
       <Card>
         <CardHeader className="text-center">
-          <CardTitle>Welcome Back</CardTitle>
-          <CardDescription>login to continue</CardDescription>
+          <CardTitle>Get Started</CardTitle>
+          <CardDescription>Create your account to get started</CardDescription>
           <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -87,6 +87,12 @@ export function RegisterForm() {
                       type="button"
                       disabled={isPending}
                     >
+                      <Image
+                        alt="Github"
+                        src="/logos/github.svg"
+                        width={20}
+                        height={20}
+                      />
                       Continue with Github
                     </Button>
                     <Button
@@ -95,10 +101,16 @@ export function RegisterForm() {
                       type="button"
                       disabled={isPending}
                     >
+                      <Image
+                        alt="Goggle"
+                        src="/logos/google.svg"
+                        width={20}
+                        height={20}
+                      />
                       Continue with Goggle
                     </Button>
                   </div>
-                  <div className="grid gap-6 ">
+                  <div className="grid gap-6 pt-2">
                     <FormField
                       control={form.control}
                       name="email"
@@ -161,7 +173,7 @@ export function RegisterForm() {
                       Sign up
                     </Button>
                   </div>
-                  <div className="text-center text-sm">
+                  <div className="text-center text-sm pt-2">
                     Already have an account?{" "}
                     <Link
                       href="/login"
