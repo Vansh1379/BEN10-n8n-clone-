@@ -1,15 +1,26 @@
 import prisma from "@/lib/db";
-import { baseProcedure, createTRPCRouter, protectedprocedure } from "../init";
+import { createTRPCRouter, protectedprocedure } from "../init";
+import { inngest } from "@/inngest/client";
 
 export const appRouter = createTRPCRouter({
-  getUsers: protectedprocedure.query(({ ctx }) => {
-    console.log({ userId: ctx.auth.user.id });
-    return prisma.user.findMany({
-      where: {
-        id: ctx.auth.user.id,
+  getWorkflows: protectedprocedure.query(({ ctx }) => {
+    return prisma.workflow.findMany();
+  }),
+  createWorkFlows: protectedprocedure.mutation(async () => {
+    await inngest.send({
+      name: "test/hello.world",
+      data: {
+        email: "hlo@yopmail.com",
+      },
+    });
+
+    return prisma.workflow.create({
+      data: {
+        name: "test-workflow",
       },
     });
   }),
 });
-// export type definition of API
+
+//export type defination of the API
 export type AppRouter = typeof appRouter;
