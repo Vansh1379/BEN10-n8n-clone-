@@ -7,7 +7,7 @@ const Page = () => {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { data } = useQuery(trpc.getWorkflows.queryOptions());
-  const testAi = useMutation(trpc.testAi.mutationOptions());
+  const testAi = useMutation(trpc.testAi.mutationOptions({}));
   const create = useMutation(
     trpc.createWorkFlows.mutationOptions({
       onSuccess: () => {
