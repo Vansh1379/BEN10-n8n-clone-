@@ -26,7 +26,6 @@ export const execute = inngest.createFunction(
           isEnabled: true,
           recordInputs: true,
           recordOutputs: true,
-          Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
         },
       }
     );
