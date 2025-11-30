@@ -4,6 +4,8 @@ import {
   useCreateWorkflow,
   useSuspenseWorkflows,
 } from "../hooks/use-workflows";
+import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+import { useRouter } from "next/navigation";
 
 export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();
@@ -13,16 +15,23 @@ export const WorkflowsList = () => {
 
 export const WorkflowHeader = ({ disabled }: { disabled?: boolean }) => {
   const createWorkflow = useCreateWorkflow();
+  const { handleError, modal } = useUpgradeModal();
+  const router = useRouter();
+
   const handleCreate = () => {
     createWorkflow.mutate(undefined, {
+      onSuccess: (data) => {
+        router.push(`/workflows/${data.id}`);
+      },
       onError: (err) => {
-        // open uprgrade model
-        console.error(err);
+        handleError(err);
       },
     });
   };
+
   return (
     <>
+      {modal}
       <Entityheader
         title="Workflows"
         description="Create and Manage your workflows"

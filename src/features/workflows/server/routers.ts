@@ -1,10 +1,14 @@
 import prisma from "@/lib/db";
-import { createTRPCRouter, protectedprocedure } from "@/trpc/init";
+import {
+  createTRPCRouter,
+  premiumProcedure,
+  protectedprocedure,
+} from "@/trpc/init";
 import { generateSlug } from "random-word-slugs";
 import z from "zod";
 
 export const workflowsRouter = createTRPCRouter({
-  create: protectedprocedure.mutation(({ ctx }) => {
+  create: premiumProcedure.mutation(({ ctx }) => {
     return prisma.workflow.create({
       data: {
         name: generateSlug(4),
