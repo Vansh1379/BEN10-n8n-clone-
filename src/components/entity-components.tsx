@@ -78,3 +78,9 @@ export const EntityContainer = ({
     </div>
   );
 };
+
+interface EntitySearchProps {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
