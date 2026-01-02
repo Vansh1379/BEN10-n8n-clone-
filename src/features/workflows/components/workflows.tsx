@@ -1,9 +1,12 @@
 "use client";
 import {
+  EmptyView,
   EntityContainer,
   Entityheader,
   EntityPagination,
   EntitySearch,
+  ErrorView,
+  LoadingView,
 } from "@/components/entity-components";
 import {
   useCreateWorkflow,
@@ -93,5 +96,32 @@ export const WorkflowsContainer = ({
     >
       {children}
     </EntityContainer>
+  );
+};
+
+export const WorkflowsLoading = () => {
+  return <LoadingView message="Loading workflows..." />;
+};
+
+export const WorkflowsError = () => {
+  return <ErrorView message="Error Loading workflows..." />;
+};
+
+export const WorkflowEmpty = () => {
+  const createWrokflow = useCreateWorkflow();
+  const { handleError, modal } = useUpgradeModal();
+
+  const handleCreate = () => {
+    createWrokflow.mutate(undefined, {
+      onError: (err) => {
+        handleError(err);
+      },
+    });
+  };
+
+  return (
+    <>
+      <EmptyView message="You havent't created any workflows yet. Get Started by creating your first workflow." />
+    </>
   );
 };
