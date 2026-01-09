@@ -79,7 +79,30 @@ export const useUpdateWorkflowName = () => {
         );
       },
       onError: (err) => {
-        toast.error(`failed to update  workflow: ${err.message}`);
+        toast.error(`failed to update workflow: ${err.message}`);
+      },
+    })
+  );
+};
+
+// hook to updat e a workflow
+export const useUpdateWorkflow = () => {
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+
+  return useMutation(
+    trpc.workflows.update.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow saved successfully ${data.name}`);
+
+        queryClient.invalidateQueries();
+        trpc.workflows.getMany.queryOptions({});
+        queryClient.invalidateQueries(
+          trpc.workflows.getOne.queryOptions({ id: data.id })
+        );
+      },
+      onError: (err) => {
+        toast.error(`failed to save workflow: ${err.message}`);
       },
     })
   );
