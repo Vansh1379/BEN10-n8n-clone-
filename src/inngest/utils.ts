@@ -16,7 +16,7 @@ export const topologicalSort = (
   // creat edge araay  for toposort
   const edges: [string, string][] = connections.map((conn) => [
     conn.fromNodeId,
-    conn.fromNodeId,
+    conn.toNodeId,
   ]);
 
   // add nodes with no connection as self edges to ensurre they are included in the toposort
