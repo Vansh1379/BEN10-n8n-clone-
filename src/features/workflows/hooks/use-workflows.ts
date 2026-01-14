@@ -85,7 +85,7 @@ export const useUpdateWorkflowName = () => {
   );
 };
 
-// hook to updat e a workflow
+// hook to update a workflow
 export const useUpdateWorkflow = () => {
   const queryClient = useQueryClient();
   const trpc = useTRPC();
@@ -103,6 +103,22 @@ export const useUpdateWorkflow = () => {
       },
       onError: (err) => {
         toast.error(`failed to save workflow: ${err.message}`);
+      },
+    })
+  );
+};
+
+// hook to execute a workflow
+export const useExecuteWorkflow = () => {
+  const trpc = useTRPC();
+
+  return useMutation(
+    trpc.workflows.execute.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(`Workflow Executes successfully ${data.name}`);
+      },
+      onError: (err) => {
+        toast.error(`failed to execute workflow: ${err.message}`);
       },
     })
   );
