@@ -11,7 +11,7 @@ export const executeWorkflow = inngest.createFunction(
     if (!workflowId) {
       throw new NonRetriableError("No workflow ID provided");
     }
-    const sortedNodes = await step.run("prepare-wrokflow", async () => {
+    const sortedNodes = await step.run("prepare-workflow", async () => {
       const workflow = await prisma.workflow.findUniqueOrThrow({
         where: { id: workflowId },
         include: { nodes: true, connections: true },
