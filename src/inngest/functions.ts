@@ -1,6 +1,9 @@
 import { NonRetriableError } from "inngest";
-import { inngest } from "./client";
+import { getExecutor } from "@/features/executions/lib/executor-registry";
+import type { WorkflowContext } from "@/features/executions/lib/types";
+import type { NodeType } from "@/generated/prisma/enums";
 import prisma from "@/lib/db";
+import { inngest } from "./client";
 import { topologicalSort } from "./utils";
 
 export const executeWorkflow = inngest.createFunction(
@@ -18,6 +21,23 @@ export const executeWorkflow = inngest.createFunction(
       });
       return topologicalSort(workflow.nodes, workflow.connections);
     });
+
+    const initialData = event.data.initialData || event.data.intialData || {};
+    let context: WorkflowContext =
+      typeof initialData === "object" && initialData !== null
+        ? (initialData as WorkflowContext)
+        : {};
+
+    for (const node of sortedNodes) {
+      const executor = getExecutor(node.type as NodeType);
+      context = await executor({
+        data: node.data as Record<string, unknown>,
+        nodeId: node.id,
+        context,
+        step,
+      });
+    }
+
     return { sortedNodes };
-  }
+  },
 );
